@@ -110,35 +110,35 @@ svg.append("text")
   .text("Bubble plot: 5 dimensions of Titanic data visualized")
 	.style("font-size","30px"); //[] https://stackoverflow.com/questions/15288850/font-size-is-not-working-in-my-d3-js-code
 
-// data processing
-d3.csv("titanic_data_processed_1607191659.csv", function(csv) {
+// data processing and plotting bubble points onto chart
+d3.csv("./data/titanic_data_processed_1607191659.csv", function(csv) {
 
-	  svg.selectAll("circle")
-						.data(csv)
-						.enter()
-						.append("circle")
-							.attr("cx", function(d) {
-								return x(80*Math.random());
-							}) 	
-							.attr("cy", function(d) {
-								return y(500*Math.random());
-							})
-							.attr("r", function(d) {
-								return r(Math.sqrt(10*Math.random()));
-							})
-							.style("fill", function(d) {
-								return color(d.Sex);
-							})
-						.style("opacity", 1.0) 
-						.style("stroke-opacity", 1) 
-						.style("stroke-width", 3)
-						.style("stroke", function(d) {
-							return stroke(d.Survived) 
-						});
-	
-	// now we initiate - moving the marks to their position
+	// initialize circles at random positions for visual effect and later animation
+	// adapted from [] http://www.jeromecukier.net/blog/2012/05/28/manipulating-data-like-a-boss-with-d3/
+	svg.selectAll("circle")
+		.data(csv)
+		.enter()
+		.append("circle")
+		.attr("cx", function(d) {
+			return x(80*Math.random());
+		}) 	
+		.attr("cy", function(d) {
+			return y(500*Math.random());
+		})
+		.attr("r", function(d) {
+			return r(Math.sqrt(10*Math.random()));
+		})
+		.style("fill", function(d) {
+			return color(d.Sex);
+		})
+		.style("opacity", 1.0) 
+		.style("stroke-opacity", 1) 
+		.style("stroke-width", 3)
+		.style("stroke", function(d) {
+			return stroke(d.Survived) 
+		});
 
-	//debugger;
+	// moving the bubble points to their true x-y positions, and correct FamSize radius
   svg.selectAll("circle")
 		.transition().duration(2000)
 		.attr("cx",function(d) {
@@ -150,94 +150,164 @@ d3.csv("titanic_data_processed_1607191659.csv", function(csv) {
 		.attr("r",function(d) {
 			return r(Math.sqrt(+d.FamSize));
 		})
-		.style("opacity", 0.4);
+		.style("opacity", 0.6);
 	
-	svg.selectAll("circle")
-		.transition().duration(10000)
+	// transition delay to highlight female survival rate increase with increased fare.
+	// [] https://stackoverflow.com/questions/38595719/javascript-d3-js-multiple-transitions-of-points-on-a-scatter-plot
+	svg.selectAll("circle") 
+		.transition().delay(4000).duration(2000)
 		.style("opacity", function(d) {
 			if (d["Sex"] == "male") {
-				return 0.0;
+				return 0.2;
 			} else if (d["Sex"] == "female") {
 				return 0.8;
 			}
 		});
 
+	//LEGENDS, DESCRIPTIONS, ANNOTATIONS, ETC.
+	// [] adapted from "L3_basic_charts_final.html", Udacity's "DATA VISUALIZATION WITH D3.JS"
+	var radius = 10,
+		multiplier = 2;
 
-//LEGENDS, DESCRIPTIONS, ANNOTATIONS, ETC.
-		// [] adapted from "L3_basic_charts_final.html", Udacity's "DATA VISUALIZATION WITH D3.JS"
-var radius = 10,
-	multiplier = 2;
+	var legend = svg.append("g")
+									.attr("class", "legend")
+									.attr("transform", "translate(" + (width - 120) + "," + 200 + ")")
+									.selectAll("g")
+									.data(["Female, Survived", "Female, Died", "Male, Survived", "Male, Died"]) //, "Male, Survived", "Male, Died"
+									.enter()
+									.append("g");
 
-var legend = svg.append("g")
-								.attr("class", "legend")
-								.attr("transform", "translate(" + (width - 120) + "," + 200 + ")")
-								.selectAll("g")
-								.data(["Female, Survived", "Female, Died", "Male, Survived", "Male, Died"]) //, "Male, Survived", "Male, Died"
-								.enter()
-								.append("g");
+	legend.append("circle")
+				.attr("cy", function(d, i) {
+					return i * 30;
+				})
+				.attr("r", radius)
+				.style("fill", function(d) {
+					if (d == "Female, Survived") {
+						return color("female");
+					} else if (d == "Female, Died") {
+						return color("female");
+					} else if (d == "Male, Survived") {
+						return color("male");
+					} else if (d == "Male, Died") {
+						return color("male");
+					}
+				})
+				.style("stroke", function(d) {
+					if (d == "Female, Survived") {
+						return "#008000";
+					} else if (d == "Female, Died") {
+						return "#ff0000";
+					} else if (d == "Male, Survived") {
+						return "#008000";
+					} else if (d == "Male, Died") {
+						return "#ff0000";
+					}
+				})
+				.style("stroke-width", 3)
+				.style("opacity", 0.8);
 
-legend.append("circle")
-			.attr("cy", function(d, i) {
-				return i * 30;
-			})
-			.attr("r", radius)
-			.style("fill", function(d) {
-				if (d == "Female, Survived") {
-					return color("female");
-				} else if (d == "Female, Died") {
-					return color("female");
-				} else if (d == "Male, Survived") {
-					return color("male");
-				} else if (d == "Male, Died") {
-					return color("male");
-				}
-			})
-			.style("stroke", function(d) {
-				if (d == "Female, Survived") {
-					return "#008000";
-				} else if (d == "Female, Died") {
-					return "#ff0000";
-				} else if (d == "Male, Survived") {
-					return "#008000";
-				} else if (d == "Male, Died") {
-					return "#ff0000";
-				}
-			})
-			.style("stroke-width", 3)
-			.style("opacity", 0.8);
-
-legend.append("text")
-      .attr("y", function(d, i) {
-				return i * 30 + 5;
-			})
-      .attr("x", radius * 2.5)
-      .text(function(d) {
-				return d;
-      })
-			.style("font-size", "15px");
-
-// bubble area - line 1
-legend.append("text")
-      .attr("y", 4 * 30 + 5)
-      .attr("x", radius * 2.5)
-			.style("font-style", "italic")
-      .text("Bubble area proportional")
-			.style("font-size", "15px");
-
-// bubble area - line 2	   
-legend.append("text")
-      .attr("y", 4.5 * 30 + 5)
-      .attr("x", radius * 2.5)
-			.style("font-style", "italic")
-      .text("to family size")
-			.style("font-size", "15px");
+	legend.append("text")
+				.attr("y", function(d, i) {
+					return i * 30 + 5;
+				})
+				.attr("x", radius * 2.5)
+				.text(function(d) {
+					return d;
+				})
+				.style("font-size", "15px");
 
 
 
+	// bubble area - line 2	   
+	legend.append("text")
+				.attr("y", 4.5 * 30 + 5)
+				.attr("x", radius * 0)
+				.style("font-style", "italic")
+				.text("Each bubble is a single person.")
+				.style("font-size", "15px");
+
+	// bubble area - line 3   
+	legend.append("text")
+				.attr("y", 5.0 * 30 + 5)
+				.attr("x", radius * 0)
+				.style("font-style", "italic")
+				.text("Family size is sum of siblings,")
+				.style("font-size", "15px");
+
+	// bubble area - line 4
+	legend.append("text")
+				.attr("y", 5.5 * 30 + 5)
+				.attr("x", radius * 0)
+				.style("font-style", "italic")
+				.text("and sum of parents/offspring.")
+				.style("font-size", "15px");
+
+				
+	// bubble point encoding - line 1
+	legend.append("text")
+				.attr("y", 7 * 30 + 5)
+				.attr("x", radius * 0)
+				.style("font-style", "italic")
+				.text("Bubble point encodes:")
+				.style("font-size", "15px");
+
+	// bubble point encoding - line 2
+	legend.append("text")
+				.attr("y", 7.5 * 30 + 5)
+				.attr("x", radius * 0.5)
+				.style("font-style", "italic")
+				.text("1. Age(years): x-position")
+				.style("font-size", "15px");
+				
+	// bubble point encoding - line 3
+	legend.append("text")
+				.attr("y", 8 * 30 + 5)
+				.attr("x", radius * 0.5)
+				.style("font-style", "italic")
+				.text("2. Fare(currency units): y-position")
+				.style("font-size", "15px");
+
+	// bubble point encoding - line 4
+	legend.append("text")
+				.attr("y", 8.5 * 30 + 5)
+				.attr("x", radius * 0.5)
+				.style("font-style", "italic")
+				.text("3. Female/Male: Color fill ")
+				.style("font-size", "15px");
+
+	// bubble point encoding - line 4.5
+	legend.append("text")
+				.attr("y", 9 * 30 + 5)
+				.attr("x", radius * 11)
+				.style("font-style", "italic")
+				.text("(pink/blue)")
+				.style("font-size", "15px");
+
+	// bubble point encoding - line 5
+	legend.append("text")
+				.attr("y", 9.5 * 30 + 5)
+				.attr("x", radius * 0.5)
+				.style("font-style", "italic")
+				.text("4. Survived/Died: Point line color ")
+				.style("font-size", "15px");
+				
+	// bubble point encoding - line 5.5
+	legend.append("text")
+				.attr("y", 10 * 30 + 5)
+				.attr("x", radius * 11.5)
+				.style("font-style", "italic")
+				.text("(green/red)")
+				.style("font-size", "15px");
+
+	// bubble point encoding - line 6
+	legend.append("text")
+				.attr("y", 10.5 * 30 + 5)
+				.attr("x", radius * 0.5)
+				.style("font-style", "italic")
+				.text("5. Family Size: Bubble area")
+				.style("font-size", "15px");
 })
-
-		 
-
 
 </script>
 
