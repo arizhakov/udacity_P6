@@ -111,7 +111,7 @@ svg.append("text")
 	.style("font-size","30px"); //[] https://stackoverflow.com/questions/15288850/font-size-is-not-working-in-my-d3-js-code
 
 // data processing
-d3.csv("titanic_data_processed_1607191659.csv", function(csv) {
+d3.csv("./data/titanic_data_processed_1607191659.csv", function(csv) {
   var a = svg.selectAll("circle")
 			 .data(csv)
 			 .enter()
