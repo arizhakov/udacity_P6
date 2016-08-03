@@ -17,6 +17,14 @@ Although it is understood that quantity of dimensions represented in a chart doe
 
 After receiving feedback, it was clear that encoding technique needed to be clarified, such as what was the approach for obtaining bubble size from family size. This was resolved by adding an explanation for the data in text below the legend. An animation and careful highlighting was also added to stress the explanatory message about females of >50 fare having great survival chance. This also has the aim of focusing the viewer on the explanatory message, but also allowing them to view the entire data set visually to check the findings/conclusions as well as find their own insights. Improvements in Rev 1 version of index were shown to the sources and they agree with the message presented.
 
+In Rev2, an even greater emphasis is placed on the explanatory story. Changes to guide the reader from the full data set to a clear finding:
+- Better title that clearly describes the final finding.
+- "Male" points were removed for clarity. Note however that initially the reader is familiarized with the both men and women to get a sense of the Titanic population. Then, the transition occurs to only females. 
+- Those "Female" points below 50 fare have more opacity to focus the reader onto the points of interest, i.e. those of 50 fare and more. 
+- legend is changed accordingly, so that irrelevant information about the family size and "Male" points.
+
+Note: the author chooses to stay with the scatter-plot approach for chart choice because it shows the technical reader that no data is ever manipulated and thus its integrity preserved. 
+
 
 ## Feedback 
 "include all feedback you received from others on your visualization from the first sketch to the final visualization"

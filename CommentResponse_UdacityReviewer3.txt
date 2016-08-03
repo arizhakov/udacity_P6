@@ -1,0 +1,27 @@
+## Code Review
+
+Suggestion 1: "The chained methods are indented a little differently in the code above line 57 versus below line 57. Try to be consistent."
+
+> I totally agree with a consistent and logical indentation for help with readability. And this was my intent when I was coding. However, the discrepency is still mysterious. Please see attached screenshots. When I set up my Notepad++ editor for 2 spaces on an indent, everything looks fine. The huge spacing in lines 23-55 that you show that goes away at line 57 does not exist on my side. Perhaps there is some tuning to be done on one or both of our viewers, but I understand the lesson and appreciate the suggestion to keep my code clean and consistent. 
+
+Suggestion 2: "Here again, the chained methods are aligning a bit differently." 
+
+> See response to Suggestion 1 above. Again, the issues with line 70, 79, 90, 100, etc with an extra indent do not appear on my side. Please see attached screenshots. 
+
+
+## Project Review
+
+Comment 1: "And then I give ideas and options with actionable feedback." 
+
+Thank you! I appreciate the balance of theory and practice, and in this case, was missing the practice part to give me an example of how to proceed. 
+
+I considered the clear examples provided in the extensive and very helpeful comment about what was meant by explanatory, and additional suggestions about over-plotting. Please see the updated README for the discussion, and 'index_rev2.html' for revised visualization.
+
+
+Comment 2: "So the reason I'm marking this off is mostly because of the first person. This person didn't see the female or wealth story. That's an indication that the explanatory finding isn't coming through strongly enough yet. Ideally, every person should at least see the main finding that wealthy women had a higher survival rate."
+
+> The feedback from sources received was on the initial viewing only. Further discussion was verbal and casual, so was not captured via text like the first round was. I used their feedback to guide the later revisions, but I do not agree that continuous rounds of follow-up must be performed. Specifically, in "Ideally, every person should at least see the main finding", yes, this would be ideal but I cannot pester my sources everytime and see if they agree; not only is this unprofessional, but I would guess that the visualization experts at NYT do not get complete agreement from their viewer review board. I understand the importance of initial feedback but beyond some readers given their experience and background may see different conclusion in the data. Because data visualization has artistic components, the data visualization engineer needs to draw the line at some point. 
+
+Comment 3: "At the same time, as I've mentioned, the explanatory story isn't coming through yet especially because of over plotting. The current animation slightly helps with the over plotting, but it could be improved. For example, including some functionality that just lets the men or the women being seen at a time could be helpful. It'll really depend on what direction you decide to take to make the explanatory story clearer for the reader."
+
+'index_rev2.html' addresses the overplotting by removing the males from the final, post-animation graphic.
