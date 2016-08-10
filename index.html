@@ -17,191 +17,409 @@ body{margin:0px;}
 
 <script>
 var width = 1400,
-    height = 900, 
-    margin = 150;
+		height = 900, 
+		margin = 150;
 
 var svg = d3.select("body")
-			.append("svg")
-			.attr("width",width+100)
-			.attr("height",height);
+						.append("svg")
+						.attr("width",width+100)
+						.attr("height",height);
 
 //scales			
-var x = d3.scale
-		  .linear()
-		  .domain([0,90])
-		  .range([margin,width-margin]);
-var y = d3.scale
-		  .linear()
-		  .domain([0,550])
-		  .range([height-margin,margin]);
+var x_mf = d3.scale
+					.linear()
+					.domain([0,80])
+					.range([margin,width-margin]);
+var x_f = d3.scale
+					.linear()
+					.domain([0,65])
+					.range([margin,width-margin]);
+var y_mf = d3.scale
+					.linear()
+					.domain([0,550])
+					.range([height-margin,margin]);
+var y_f = d3.scale
+					.linear()
+					.domain([0,300])
+					.range([height-margin,margin]);
 var r = d3.scale
-		  .linear()
-		  .domain([0,8])
-		  .range([5,50]);
+					.linear()
+					.domain([0,8])
+					.range([5,50]);
 var color = d3.scale
-			  .ordinal()
-			  .range(["df99a5", "#1e90ff"]);
+							.ordinal()
+							.range(["#1e90ff", "df99a5"]);
 var stroke = d3.scale
-			  .ordinal()
-			  .range(["#ff0000", "#008000"]); 
+							.ordinal()
+							.range(["#ff0000", "#008000"]); 
 			  
 //axis
-var xAxis = d3.svg.axis()
-			  .scale(x)
-			  .orient("bottom");
+var xAxis_mf = d3.svg.axis()
+							.scale(x_mf)
+							.orient("bottom");
 
-var yAxis = d3.svg.axis()
-			  .scale(y)
-			  .orient("left");
+var yAxis_mf = d3.svg.axis()
+							.scale(y_mf)
+							.orient("left");
+
+var xAxis_f = d3.svg.axis()
+							.scale(x_f)
+							.orient("bottom");
+
+var yAxis_f = d3.svg.axis()
+							.scale(y_f)
+							.orient("left");
 
 svg.append("g")
-   .attr("class", "axis")
-   .attr("transform", "translate(0," + (height - margin) + ")")
-   .call(xAxis);
+	.attr("class", "axis")
+	.attr("transform", "translate(0," + (height - margin) + ")")
+	.call(xAxis_mf)
+	.transition().delay(6000).duration(0)
+	.call(xAxis_f);
 
 svg.append("g")
-  .attr("class", "axis")
-  .attr("transform", "translate(" + margin + ",0)")
-  .call(yAxis);
+	.attr("class", "axis")
+	.attr("transform", "translate(" + margin + ",0)")
+	.call(yAxis_mf)
+	.transition().delay(6000).duration(0)
+	.call(yAxis_f);
 
 //guidelines  
 svg.selectAll(".h")
-   .data(d3.range(0,515,50))
-   .enter()
-   .append("line")
-   .classed("h",1)
-   .attr("x1",margin)
-   .attr("x2",width-margin)
-   .attr("y1",y)
-   .attr("y2",y);
+	.data(d3.range(0,515,50))
+	.enter()
+  .append("line")
+  .classed("h",1)
+  .attr("x1",margin)
+  .attr("x2",width-margin)
+  .attr("y1",y_mf)
+  .attr("y2",y_mf)
+	.transition().delay(6000).duration(0)
+	.style("opacity",0);
   
 svg.selectAll(".v")
-   .data(d3.range(0,90, 5))
-   .enter()
-   .append("line")
-   .classed("v",1)
-   .attr("y1",margin)
-   .attr("y2",height-margin)
-   .attr("x1",x)
-   .attr("x2",x);
+	.data(d3.range(0,80,5))
+  .enter()
+  .append("line")
+  .classed("v",1)
+  .attr("y1",margin)
+  .attr("y2",height-margin)
+  .attr("x1",x_mf)
+  .attr("x2",x_mf)
+	.transition().delay(6000).duration(0)
+	.style("opacity",0);
+
+svg.selectAll(".h1")
+	.data(d3.range(0,300,50))
+	.enter()
+  .append("line")
+  .classed("h",1)
+  .attr("x1",margin)
+  .attr("x2",width-margin)
+  .attr("y1",y_f)
+  .attr("y2",y_f)
+	.style("opacity",0)
+	.transition().delay(6000).duration(2000)
+	.style("opacity",1);
+
+svg.selectAll(".v1")
+	.data(d3.range(0,65,5))
+  .enter()
+  .append("line")
+  .classed("v",1)
+  .attr("y1",margin)
+  .attr("y2",height-margin)
+  .attr("x1",x_f)
+  .attr("x2",x_f)
+	.style("opacity",0)
+	.transition().delay(6000).duration(2000)
+	.style("opacity",1);
   
 //label axis. [] https://stackoverflow.com/questions/11189284/d3-axis-labeling
 svg.append("text")
-    .attr("class", "x label")
-    .attr("text-anchor", "end")
-    .attr("x", width/2)
-    .attr("y", height-margin/1.5)
-    .text("Age (years)");
+	.attr("class", "x label")
+  .attr("text-anchor", "end")
+  .attr("x", width/2)
+  .attr("y", height-margin/1.5)
+  .text("Age (years)");
 	
 svg.append("text")
-    .attr("class", "y label")
-    .attr("text-anchor", "end")
-    .attr("y", margin/2)
+  .attr("class", "y label")
+  .attr("text-anchor", "end")
+  .attr("y", margin/2)
 	.attr("x", -height/2.5)
-    .attr("dy", ".75em")
-    .attr("transform", "rotate(-90)")
-    .text("Fare (currency units)");
+  .attr("dy", ".75em")
+  .attr("transform", "rotate(-90)")
+  .text("Fare (currency units)");
 
 // title
 svg.append("text")
-    .attr("class", "graph title")
-    .attr("x", width/4)
-    .attr("y", 100)
-    .text("Bubble plot: 5 dimensions of Titanic data visualized")
+  .attr("class", "graph title")
+  .attr("x", width/4)
+  .attr("y", 75)
+  .text("Transforming multi-dimensional Titanic data into insight") 
 	.style("font-size","30px"); //[] https://stackoverflow.com/questions/15288850/font-size-is-not-working-in-my-d3-js-code
+svg.append("text")
+  .attr("class", "graph title")
+  .attr("x", width/4)
+  .attr("y", 100)
+  .text("Women who paid over 50 fare were more likely to survive") 
+	.style("font-size","25px")
+	.style("opacity", 0)
+	.style("font-style", "italic")
+	.transition().delay(4000).duration(2000)
+	.style("opacity",1);
+	
+// data processing and plotting bubble points onto chart
+d3.csv("./data/titanic_data_processed_1607191659.csv", function(csv) {
 
-// data processing
-d3.csv("titanic_data_processed_1607191659.csv", function(csv) {
-  var a = svg.selectAll("circle")
-			 .data(csv)
-			 .enter()
-			 .append("circle")
-			 .attr("cx", function(d) {
-				return x(+d.Age);
-			  }) 	
-			 .attr("cy", function(d) {
-				return y(+d.Fare);
-			 })
-			 .attr("r", function(d) {
-				return r(Math.sqrt(+d.FamSize));
-			 })
-			 .style("fill", function(d) {
-				return color(d.Sex);
-			 })
-			 .style("opacity", 0.8) 
-			 .style("stroke-opacity", 1) 
-			 .style("stroke-width", 3)
-			 .style("stroke", function(d) {
-				return stroke(d.Survived) 
-			 });
+	// initialize circles at random positions for visual effect and later animation
+	// adapted from [] http://www.jeromecukier.net/blog/2012/05/28/manipulating-data-like-a-boss-with-d3/
+	svg.selectAll("circle")
+		.data(csv)
+		.enter()
+		.append("circle")
+		.attr("cx", function(d) {
+			return x_mf(80*Math.random());
+		}) 	
+		.attr("cy", function(d) {
+			return y_mf(550*Math.random());
+		})
+		.attr("r", function(d) {
+			return r(Math.sqrt(10*Math.random()));
+		})
+		.style("fill", function(d) {
+			return color(d.Sex);
+		})
+		.style("opacity", 1.0) 
+		.style("stroke-opacity", 1) 
+		.style("stroke-width", 3)
+		.style("stroke", function(d) {
+			return stroke(d.Survived) 
+		});
+
+	// moving the bubble points to their true x-y positions, and correct FamSize radius
+  svg.selectAll("circle")
+		.transition().duration(2000)
+		.attr("cx",function(d) {
+			return x_mf(+d.Age);
+		})
+		.attr("cy",function(d) {
+			return y_mf(+d.Fare);
+		})
+		.attr("r",function(d) {
+			return r(Math.sqrt(+d.FamSize));
+		})
+		.style("opacity", 0.6);
+	
+	// transition delay to highlight female survival rate increase with increased fare.
+	// [] https://stackoverflow.com/questions/38595719/javascript-d3-js-multiple-transitions-of-points-on-a-scatter-plot
+	svg.selectAll("circle") 
+		.transition().delay(4000).duration(2000)
+		.style("opacity", function(d) {
+			if (d["Sex"] == "male") {
+				return 0;
+			} else if (d["Sex"] == "female" && d["Fare"]>50) {
+				return 0.8;
+			} else if (d["Sex"] == "female" && d["Fare"]<=50) {
+				return 0.2;
+			}
+		})
+		.attr("r", 4);
+	
+	//adjust circles to new scale
+	svg.selectAll("circle") 
+		.transition().delay(6000).duration(2000)
+		.attr("cx",function(d) {
+			return x_f(+d.Age);
+		})
+		.attr("cy",function(d) {
+			return y_f(+d.Fare);
+		})
+		.style("opacity", function(d) {
+			if (d["Sex"] == "male") {
+				return 0;
+			} else if (d["Sex"] == "female" && d["Fare"]>50) {
+				return 0.8;
+			} else if (d["Sex"] == "female" && d["Fare"]<=50) {
+				return 0.1;
+			}
+		})
+		.attr("r", 4);
+		
+
+	//LEGENDS, DESCRIPTIONS, ANNOTATIONS, ETC.
+	// [] adapted from "L3_basic_charts_final.html", Udacity's "DATA VISUALIZATION WITH D3.JS"
+	var radius = 10,
+		multiplier = 2;
+
+	var legend = svg.append("g")
+									.attr("class", "legend")
+									.attr("transform", "translate(" + (width - 120) + "," + 200 + ")")
+									.selectAll("g")
+									.data(["Female, Survived", "Female, Died", "Male, Survived", "Male, Died"]) //, "Male, Survived", "Male, Died"
+									.enter()
+									.append("g");
+
+	legend.append("circle")
+				.attr("cy", function(d, i) {
+					return i * 30;
+				})
+				.attr("r", radius)
+				.style("fill", function(d) {
+					if (d == "Female, Survived") {
+						return color("female");
+					} else if (d == "Female, Died") {
+						return color("female");
+					} else if (d == "Male, Survived") {
+						return color("male");
+					} else if (d == "Male, Died") {
+						return color("male");
+					}
+				})
+				.style("stroke", function(d) {
+					if (d == "Female, Survived") {
+						return "#008000";
+					} else if (d == "Female, Died") {
+						return "#ff0000";
+					} else if (d == "Male, Survived") {
+						return "#008000";
+					} else if (d == "Male, Died") {
+						return "#ff0000";
+					}
+				})
+				.style("stroke-width", 3)
+				.transition().delay(4000).duration(2000)
+				.style("opacity", function(d) {
+					if (d == "Female, Survived") {
+						return 0.8;
+					} else if (d == "Female, Died") {
+						return 0.8;
+					} else if (d == "Male, Survived") {
+						return 0;
+					} else if (d == "Male, Died") {
+						return 0;
+					}
+				});
+
+	legend.append("text")
+				.attr("y", function(d, i) {
+					return i * 30 + 5;
+				})
+				.attr("x", radius * 2.5)
+				.text(function(d) {
+					return d;
+				})
+				.style("font-size", "15px")
+				.transition().delay(4000).duration(2000)
+				.style("opacity", function(d) {
+					if (d == "Female, Survived") {
+						return 1;
+					} else if (d == "Female, Died") {
+						return 1;
+					} else if (d == "Male, Survived") {
+						return 0;
+					} else if (d == "Male, Died") {
+						return 0;
+					}
+				});
+
+	// bubble area - line 2	   
+	legend.append("text")
+				.attr("y", 4.5 * 30 + 5)
+				.attr("x", radius * 0)
+				.style("font-style", "italic")
+				.text("Each bubble is a single person.")
+				.style("font-size", "15px");
+
+	// bubble area - line 3   
+	legend.append("text")
+				.attr("y", 5.0 * 30 + 5)
+				.attr("x", radius * 0)
+				.style("font-style", "italic")
+				.text("Family size is sum of siblings,")
+				.style("font-size", "15px")
+				.transition().delay(4000).duration(2000)
+				.style("opacity", 0.0);;
+
+	// bubble area - line 4
+	legend.append("text")
+				.attr("y", 5.5 * 30 + 5)
+				.attr("x", radius * 0)
+				.style("font-style", "italic")
+				.text("and sum of parents/offspring.")
+				.style("font-size", "15px")
+				.transition().delay(4000).duration(2000)
+				.style("opacity", 0.0);
+
+				
+				
+	// bubble point encoding - line 1
+	legend.append("text")
+				.attr("y", 7 * 30 + 5)
+				.attr("x", radius * 0)
+				.style("font-style", "italic")
+				.text("Bubble point encodes:")
+				.style("font-size", "15px");
+
+	// bubble point encoding - line 2
+	legend.append("text")
+				.attr("y", 7.5 * 30 + 5)
+				.attr("x", radius * 0.5)
+				.style("font-style", "italic")
+				.text("1. Age(years): x-position")
+				.style("font-size", "15px");
+				
+	// bubble point encoding - line 3
+	legend.append("text")
+				.attr("y", 8 * 30 + 5)
+				.attr("x", radius * 0.5)
+				.style("font-style", "italic")
+				.text("2. Fare(currency units): y-position")
+				.style("font-size", "15px");
+
+	// bubble point encoding - line 4
+	legend.append("text")
+				.attr("y", 8.5 * 30 + 5)
+				.attr("x", radius * 0.5)
+				.style("font-style", "italic")
+				.text("3. Female/Male: Color fill ")
+				.style("font-size", "15px");
+
+	// bubble point encoding - line 4.5
+	legend.append("text")
+				.attr("y", 9 * 30 + 5)
+				.attr("x", radius * 11)
+				.style("font-style", "italic")
+				.text("(pink/blue)")
+				.style("font-size", "15px");
+
+	// bubble point encoding - line 5
+	legend.append("text")
+				.attr("y", 9.5 * 30 + 5)
+				.attr("x", radius * 0.5)
+				.style("font-style", "italic")
+				.text("4. Survived/Died: Point line color ")
+				.style("font-size", "15px");
+				
+	// bubble point encoding - line 5.5
+	legend.append("text")
+				.attr("y", 10 * 30 + 5)
+				.attr("x", radius * 11.5)
+				.style("font-style", "italic")
+				.text("(green/red)")
+				.style("font-size", "15px");
+
+	// bubble point encoding - line 6
+	legend.append("text")
+				.attr("y", 10.5 * 30 + 5)
+				.attr("x", radius * 0.5)
+				.style("font-style", "italic")
+				.text("5. Family Size: Bubble area")
+				.style("font-size", "15px")
+				.transition().delay(4000).duration(2000)
+				.style("opacity", 0.0);
 })
-
-// [] adapted from "L3_basic_charts_final.html", Udacity's "DATA VISUALIZATION WITH D3.JS"
-var radius = 10,
-	multiplier = 2;
-
-var legend = svg.append("g")
-                .attr("class", "legend")
-                .attr("transform", "translate(" + (width - 120) + "," + 200 + ")")
-                .selectAll("g")
-                .data(["Female, Survived", "Female, Died", "Male, Survived", "Male, Died"]) //, "Male, Survived", "Male, Died"
-                .enter()
-				.append("g");
-
-legend.append("circle")
-      .attr("cy", function(d, i) {
-			return i * 30;
-      })
-      .attr("r", radius)
-      .style("fill", function(d) {
-			if (d == "Female, Survived") {
-				return color("female");
-			} else if (d == "Female, Died") {
-				return color("female");
-			} else if (d == "Male, Survived") {
-				return color("male");
-			} else if (d == "Male, Died") {
-				return color("male");
-			}
-	  })
-	  .style("stroke", function(d) {
-			if (d == "Female, Survived") {
-				return "#008000";
-			} else if (d == "Female, Died") {
-				return "#ff0000";
-			} else if (d == "Male, Survived") {
-				return "#008000";
-			} else if (d == "Male, Died") {
-				return "#ff0000";
-			}
-	  })
-	  .style("stroke-width", 3)
-	  .style("opacity", 0.8);
-
-legend.append("text")
-      .attr("y", function(d, i) {
-			return i * 30 + 5;
-      })
-      .attr("x", radius * 2.5)
-      .text(function(d) {
-			return d;
-      })
-	  .style("font-size", "15px");
-
-// bubble area - line 1
-legend.append("text")
-      .attr("y", 4 * 30 + 5)
-      .attr("x", radius * 2.5)
-	  .style("font-style", "italic")
-      .text("Bubble area proportional")
-	  .style("font-size", "15px");
-// bubble area - line 2	   
-legend.append("text")
-      .attr("y", 4.5 * 30 + 5)
-      .attr("x", radius * 2.5)
-	  .style("font-style", "italic")
-      .text("to family size")
-	  .style("font-size", "15px"); 
 
 </script>
 

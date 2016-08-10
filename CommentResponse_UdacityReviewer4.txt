@@ -1,0 +1,24 @@
+## Code Review
+
+N/A
+
+## Project Review
+
+Comment 1: "It would be better to name your current version index.html as this is what initially renders when served locally." 
+
+Changed.
+
+
+Comment 2: "If the final plot were to use y-axis upper limit of 300, the x-axis limit of 65, and the size of the circles reduced to a radius of 4,...", to fix overplotting.
+
+Changed. Animation also added to transition to this next, zoomed-in step. Further, to assist with overplotting, a slight decrease to opacity of points below 50 fare is done at the last step to really hone in on the message and viewer's attention focus on points of fare 50 and above.
+
+
+Comment 3: "As mentioned in the explanatory portion of the critique, there is 1 outlier which causes the range of the y-axis to go from about 300 to 500. If the final animation excluded this outlier and shortened the range of the y-axis, the points below 50 could be seen better."
+
+Changed via Comment #2 change. 
+
+
+Comment 4: "The index.html file doesn't render with any data points. The problem lies in your reference to the .csv file. It doesn't reference the data directory. You have a previous version index_rev1.html that renders so that meets this specification but I wanted to point this out."
+
+Changed. All "index.html" -type files, including old versions, read in data and render appropriately.
